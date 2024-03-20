@@ -1,0 +1,11 @@
+<div class="display" style="width: {{ width }}px; height: {{ height }}px;">
+  <div class="ceiling" style="background: blue;"></div>
+  <div class="floor" style="background: green;"></div>
+  <div class="walls">
+    @for (line of vlines; track line.id) {
+    <div class="vline"
+      style="background-color: {{ line.color }}; height: {{ line.height }}%; width: {{ line.width ?? 2 }}px;">
+    </div>
+    }
+  </div>
+</div>
