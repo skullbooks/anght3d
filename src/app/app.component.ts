@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { RendererComponent } from './renderer/renderer.component';
-import { EngineService } from './engine.service';
+import { EngineService } from './engine/engine.service';
 import { ScreenRenderData } from './renderer/interfaces';
 
 @Component({
@@ -14,30 +14,34 @@ import { ScreenRenderData } from './renderer/interfaces';
 export class AppComponent {
   title = 'anght3d';
   screenRenderData: ScreenRenderData;
+  displayWidth: number = 600;
+  displayHeight: number = 300;
 
   engine: EngineService = inject(EngineService);
 
   turnLeft() {
-    this.engine.turn(-10);
+    this.engine.changeView(-10, null);
     this.screenRenderData = this.engine.getRenderData();
   }
 
   turnRight() {
-    this.engine.turn(10);
+    this.engine.changeView(10, null);
     this.screenRenderData = this.engine.getRenderData();
   }
 
   moveForward() {
-    this.engine.move(.5);
+    this.engine.changeView(null, .5);
     this.screenRenderData = this.engine.getRenderData();
   }
 
   moveBackwards() {
-    this.engine.move(-.5);
+    this.engine.changeView(null, -.5);
     this.screenRenderData = this.engine.getRenderData();
   }
 
   constructor() {
+    this.engine.init(this.displayWidth, this.displayWidth / 2);
+
     this.screenRenderData = this.engine.getRenderData();
     console.log("APP DEBUG", this);
 

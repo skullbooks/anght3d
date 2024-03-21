@@ -76,7 +76,7 @@
     display: flex;
     justify-content: space-around;
     width: 100%;
-    max-width: 700px;
+    max-width: 900px;
     margin-bottom: 3rem;
   }
 
@@ -180,7 +180,7 @@
     <div class="left-side">
       <h1>Hello, {{ title }}</h1>
       <p>
-        <ht3d-renderer [width]="400" [height]="200" [vlines]="screenRenderData"></ht3d-renderer>
+        <ht3d-renderer [width]="displayWidth" [height]="displayHeight" [vlines]="screenRenderData"></ht3d-renderer>
       </p>
       <p>Controls:<br />
         <button (click)="turnLeft()">Left (A)</button>
