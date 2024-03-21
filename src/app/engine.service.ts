@@ -7,16 +7,18 @@ import { Color, Intersection, Line, Point, ScreenRenderData, Vector } from './re
 export class EngineService {
 
   protected map: Line[] = [
-    [{ x: 0, y: 0 }, { x: 5, y: 0 }, { r: 150, g: 150, b: 150 }],
-    [{ x: 0, y: 0 }, { x: 0, y: 5 }, { r: 150, g: 150, b: 150 }],
-    [{ x: 5, y: 0 }, { x: 5, y: 5 }, { r: 150, g: 150, b: 150 }],
-    [{ x: 0, y: 5 }, { x: 5, y: 5 }, { r: 150, g: 150, b: 150 }],
-    [{ x: 2, y: 2 }, { x: 3, y: 2 }, { r: 255, g: 255, b: 0 }],
-    [{ x: 2, y: 2 }, { x: 2, y: 1 }, { r: 255, g: 0, b: 255 }],
+    [{ x: 0, y: 0 }, { x: 10, y: 0 }, { r: 150, g: 150, b: 150 }],
+    [{ x: 0, y: 0 }, { x: 0, y: 10 }, { r: 150, g: 150, b: 150 }],
+    [{ x: 10, y: 0 }, { x: 10, y: 10 }, { r: 150, g: 150, b: 150 }],
+    [{ x: 0, y: 10 }, { x: 10, y: 10 }, { r: 150, g: 150, b: 150 }],
+    [{ x: 2, y: 1 }, { x: 4, y: 1 }, { r: 200, g: 0, b: 0 }],
+    [{ x: 4, y: 1 }, { x: 4, y: 3 }, { r: 200, g: 0, b: 0 }],
+    [{ x: 4, y: 3 }, { x: 2, y: 3 }, { r: 200, g: 0, b: 0 }],
+    [{ x: 2, y: 3 }, { x: 2, y: 1 }, { r: 200, g: 0, b: 0 }],
   ];
 
   protected viewPoint: Point = { x: 1, y: 2.5 };
-  protected viewAngle = 70;
+  protected viewAngle = 55;
   protected viewDirection = -90;
 
   protected lastRenderData: ScreenRenderData = [];
@@ -186,8 +188,10 @@ export class EngineService {
       const vector = this.vectorFromAngle(startAngle + (i * angleStep));
       const intersectionAndDistance = this.calculateIntersectionAndDistance(point, vector, this.map);
 
+      const height = (100 - (intersectionAndDistance[0].distance * 10));
+
       data.push((intersectionAndDistance.length > 0)
-        ? { id: i, height: (100 - (intersectionAndDistance[0].distance * 10)), color: this.rgbToHex(intersectionAndDistance[0].color, intersectionAndDistance[0].distance * 10), width: 2 /*widths[i]*/, distance: intersectionAndDistance[0].distance }
+        ? { id: i, height: (height > 0) ? height : 0, color: this.rgbToHex(intersectionAndDistance[0].color, intersectionAndDistance[0].distance * 10), width: 2 /*widths[i]*/, distance: intersectionAndDistance[0].distance }
         : { id: i, height: 0, color: '#000000', distance: 100 });
     }
 
