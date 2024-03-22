@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Color, Intersection, Line, Point, ScreenRenderData, Vector } from '../renderer/interfaces';
+import { Color, Intersection, Line, Point, ScreenRenderData, Vector } from '../interface/engine.interface';
 import { calculateIntersectionAndDistance, clamp, rgbToHex } from './engine.utils';
+import { EventService } from './event.service';
+import { KeyboardService } from './keyboard.service';
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +29,7 @@ export class EngineService {
   protected widthResolution = 200;
   protected lastRenderData: ScreenRenderData = [];
 
+  protected intervalSubscription;
 
 
   protected calculateAngle(vector: Vector): number {
@@ -74,7 +77,7 @@ export class EngineService {
         : { id: i, height: 0, color: '#000000', distance: 100 });
     }
 
-    console.log("DEBUG DATA", data);
+    // console.log("DEBUG DATA", data);
     return data;
   }
 
@@ -92,7 +95,6 @@ export class EngineService {
       const distanceBackwards = calculateIntersectionAndDistance(this.viewPoint, this.viewDirection - 180, this.map)[0].distance ?? 100;
       if (!((step > 0 && step + 0.3 > distanceForward) || (step < 0 && Math.abs(step) + 0.3 > distanceBackwards))) this.viewPoint = this.calculateNewPoint(this.viewPoint, step, this.viewDirection);
     }
-    console.log("SERVICE ChangeView", this.viewDirection, this.viewPoint);
   }
 
   init(widthScreen: number = 400, widthResolution: number = 200) {
@@ -100,5 +102,20 @@ export class EngineService {
     this.widthResolution = widthResolution;
   }
 
-  constructor() { }
+  constructor(private eventService: EventService, private keyboardService: KeyboardService) {
+
+    this.intervalSubscription = this.eventService.subscribe("interval", () => {
+      const pressedKeys = this.keyboardService.getPressed();
+      const oldViewPoint = { ...this.viewPoint };
+      const oldViewDirection = this.viewDirection;
+
+      if (pressedKeys.has('w')) this.changeView(null, .2);
+      if (pressedKeys.has('s')) this.changeView(null, -.2);
+      if (pressedKeys.has('a')) this.changeView(-5, null);
+      if (pressedKeys.has('d')) this.changeView(5, null);
+
+      if (oldViewPoint.x !== this.viewPoint.x || oldViewPoint.y !== this.viewPoint.y || oldViewDirection !== this.viewDirection) this.eventService.fireEvent({ event: 'viewChange', payload: { viewPoint: this.viewPoint, viewDirection: this.viewDirection } });
+    });
+
+  }
 }

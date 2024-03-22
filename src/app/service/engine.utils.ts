@@ -1,4 +1,4 @@
-import { Color, Intersection, Line, Point, Vector } from "../renderer/interfaces";
+import { Color, Intersection, Line, Point, Vector } from "../interface/engine.interface";
 
 export function rgbToHex(color: Color, distance: number): string {
   // RGB-Werte sicherstellen, dass sie im gültigen Bereich liegen (0-255)

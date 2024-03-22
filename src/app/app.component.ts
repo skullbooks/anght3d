@@ -1,8 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { RendererComponent } from './renderer/renderer.component';
-import { EngineService } from './engine/engine.service';
-import { ScreenRenderData } from './renderer/interfaces';
+import { EngineService } from './service/engine.service';
+import { ScreenRenderData } from './interface/engine.interface';
+import { KeyboardService } from './service/keyboard.service';
+import { EventService } from './service/event.service';
 
 @Component({
   selector: 'app-root',
@@ -18,6 +20,8 @@ export class AppComponent {
   displayHeight: number = 300;
 
   engine: EngineService = inject(EngineService);
+  keyboard: KeyboardService = inject(KeyboardService);
+  eventService: EventService = inject(EventService);
 
   turnLeft() {
     this.engine.changeView(-10, null);
@@ -41,27 +45,7 @@ export class AppComponent {
 
   constructor() {
     this.engine.init(this.displayWidth, this.displayWidth / 2);
-
-    this.screenRenderData = this.engine.getRenderData();
-    console.log("APP DEBUG", this);
-
-    addEventListener("keypress", (event) => {
-      switch (event.key) {
-        case 'w':  // go forward
-          this.moveForward();
-          break;
-        case 's':  // go back?
-          this.moveBackwards();
-          break;
-        case 'a':  // turn left
-          this.turnLeft();
-          break;
-        case 'd': // turn right
-          this.turnRight();
-          break;
-        default:
-          break;
-      }
-    });
+    this.screenRenderData = this.engine.getRenderData(); // Initial Render
+    this.eventService.subscribe('viewChange', () => { this.screenRenderData = this.engine.getRenderData(); });
   }
 }

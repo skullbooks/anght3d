@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ScreenRenderData } from './interfaces';
+import { ScreenRenderData } from '../interface/engine.interface';
 
 @Component({
   selector: 'ht3d-renderer',
@@ -12,6 +12,4 @@ export class RendererComponent {
   @Input() width?: number = 400;
   @Input() height?: number = 300;
   @Input() vlines?: ScreenRenderData = [];
-
-
 }
