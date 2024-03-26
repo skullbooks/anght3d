@@ -1,10 +1,20 @@
-<div class="display" style="width: {{ width }}px; height: {{ height }}px;">
-  <div class="ceiling" style="background: linear-gradient(0deg, rgba(0,212,255,1) 0%, rgba(9,9,121,1) 85%, rgba(9,9,121,1) 100%);"></div>
-  <div class="floor" style="background: linear-gradient(0deg, rgba(73,121,9,1) 0%, rgba(8,66,7,1) 64%, rgba(29,48,40,1) 100%);"></div>
+<div class="display" [ngStyle]="{
+    'width': width + 'px',
+    'height': height + 'px'
+}">
+  <div class="ceiling" [ngStyle]="{
+      'background': 'linear-gradient(0deg, ' + ceilingColorFar + ' 0%, ' + ceilingColorNear + ' 85%, ' + ceilingColorNear + ' 100%)'
+    }"></div>
+  <div class="floor" [ngStyle]="{
+    'background': 'linear-gradient(0deg, ' + floorColorNear + ' 0%, ' + floorColorFar + ' 64%, ' + floorColorFar + ' 100%)'
+  }"></div>
   <div class="walls">
     @for (line of vlines; track line.id) {
-    <div class="vline"
-      style="background-color: {{ line.color }}; height: {{ line.height }}%; width: {{ line.width ?? 2 }}px;">
+    <div class="vline" [ngStyle]="{
+        'background-color': line.color,
+        'height': line.height + '%',
+        'width': line.width + 'px'
+      }">
     </div>
     }
   </div>
